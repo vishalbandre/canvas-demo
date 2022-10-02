@@ -26,104 +26,46 @@ class CustomView @JvmOverloads constructor(
 
     // Shapes
     private val shapeValues = arrayOf("line", "triangle", "square", "rectangle", "circle")
+    private var currentShapeIndex = 0
 
     // Tools
     private val toolValues = arrayOf("pen", "eraser")
+    private val currentToolIndex = 0
 
     // Colors
     private val colorValues = arrayOf("black", "red", "green", "blue", "yellow", "white")
+    private val currentColorIndex = 0
 
-    // Modes
-    private val modeValues = arrayOf("draw", "erase")
+    // Brushes
+    private val brushValues = arrayOf("small", "medium", "large")
+    private val currentBrushIndex = 0
 
-// Current mode
-    var mode: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
+    private var trianglePath: Path? = null
 
-    // Current shape
-    var shape: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current tool
-    var tool: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current color
-
-    var color: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current size
-    var size: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current alpha
-    var alpha: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current fill
-    var fill: Boolean = false
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current stroke
-    var stroke: Boolean = false
-        set(value) {
-            field = value
-            invalidate()
-        }
-
-    // Current stroke width
-    var strokeWidth: Int = 0
-        set(value) {
-            field = value
-            invalidate()
-        }
+    // constructor() for trianglePath CustomView
+    init {
+        trianglePath = Path()
+    }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         setupPaint()
 
-        Log.d("CustomView", "onDraw: $mode")
+        Log.d("CustomView", "onDraw: $shapeValues")
 
-        when (mode) {
-            0 -> {
-                canvas.drawPath(path, paint)
-                Log.d("CustomView", "onDraw: Pen")
-            }
-            1 -> {
-                canvas.drawCircle(dX, dY, 50f, paint)
-                Log.d("CustomView", "onDraw: Circle")
-            }
-            2 -> {
-                canvas.drawColor(Color.WHITE)
-            }
-        }
         canvas.drawPath(path, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        val result = super.onTouchEvent(event)
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            currentShapeIndex =  (currentShapeIndex ++) % shapeValues.length;
+            postInvalidate();
+            return true;
+        }
+        return result;
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 dX = event.rawX
