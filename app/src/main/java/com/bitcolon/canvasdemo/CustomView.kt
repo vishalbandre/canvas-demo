@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -18,37 +19,128 @@ class CustomView @JvmOverloads constructor(
 
     private var paint: Paint = Paint()
 
+    private val path: Path = Path()
+
     private var dX: Float = 0.0f
     private var dY: Float = 0.0f
+
+    // Shapes
+    private val shapeValues = arrayOf("line", "triangle", "square", "rectangle", "circle")
+
+    // Tools
+    private val toolValues = arrayOf("pen", "eraser")
+
+    // Colors
+    private val colorValues = arrayOf("black", "red", "green", "blue", "yellow", "white")
+
+    // Modes
+    private val modeValues = arrayOf("draw", "erase")
+
+// Current mode
+    var mode: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current shape
+    var shape: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current tool
+    var tool: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current color
+
+    var color: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current size
+    var size: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current alpha
+    var alpha: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current fill
+    var fill: Boolean = false
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current stroke
+    var stroke: Boolean = false
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    // Current stroke width
+    var strokeWidth: Int = 0
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         setupPaint()
-//        canvas.save()
-//        canvas.drawCircle(dX, dY, 5f, paint)
-//        canvas.restore()
 
-        // Paint on move
-        canvas.drawCircle(dX, dY, 5f, paint)
-        Log.d("New Values: ", "dX: $dX, dY: $dY")
+        Log.d("CustomView", "onDraw: $mode")
 
+        when (mode) {
+            0 -> {
+                canvas.drawPath(path, paint)
+                Log.d("CustomView", "onDraw: Pen")
+            }
+            1 -> {
+                canvas.drawCircle(dX, dY, 50f, paint)
+                Log.d("CustomView", "onDraw: Circle")
+            }
+            2 -> {
+                canvas.drawColor(Color.WHITE)
+            }
+        }
+        canvas.drawPath(path, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        invalidate();
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 dX = event.rawX
                 dY = event.rawY
-//                invalidate()
+                if (mode == 0) {
+                    path.moveTo(dX, dY)
+                }
             }
             MotionEvent.ACTION_MOVE -> {
                 dX = event.rawX
                 dY = event.rawY
-//                invalidate()
+                if (mode == 0) {
+                    path.lineTo(dX, dY)
+                }
             }
         }
+        postInvalidate()
         return true
     }
 
@@ -59,5 +151,6 @@ class CustomView @JvmOverloads constructor(
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
+        paint.style = Paint.Style.STROKE
     }
 }

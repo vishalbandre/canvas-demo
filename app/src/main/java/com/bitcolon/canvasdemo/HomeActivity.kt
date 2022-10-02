@@ -4,16 +4,37 @@ import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 
 class HomeActivity : AppCompatActivity() {
+
+    private lateinit var customView: CustomView
+
+    private lateinit var btnPen: Button
+    private lateinit var btnCircle: Button
+    private lateinit var btnEraser: Button
 
 //    private lateinit var constraintLayout: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        customView = CustomView(this)
+
+        btnPen = findViewById(R.id.btnPen)
+        btnCircle = findViewById(R.id.btnCircle)
+        btnEraser = findViewById(R.id.btnEraser)
+
+        btnPen.setOnClickListener {
+            customView.mode = 0
+        }
+
+        btnCircle.setOnClickListener {
+            customView.mode = 1
+        }
 
 //        // Initiate the ImageView and its properties
 //        val i = ImageView(this).apply {
@@ -36,4 +57,6 @@ class HomeActivity : AppCompatActivity() {
 //        // Set the layout as the content view
 //        setContentView(constraintLayout)
     }
+
+
 }
