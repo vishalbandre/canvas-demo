@@ -23,21 +23,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <Button
-                android:id="@+id/btnPen"
+                android:id="@+id/btnColorRed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pen" />
+                android:text="Red" />
             <Button
-                android:id="@+id/btnCircle"
+                android:id="@+id/btnColorGreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Circle" />
+                android:text="Green" />
             <Button
-                android:id="@+id/btnEraser"
+                android:id="@+id/btnColorBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Eraser" />
-
+                android:text="Blue" />
         </LinearLayout>
     </FrameLayout>
 

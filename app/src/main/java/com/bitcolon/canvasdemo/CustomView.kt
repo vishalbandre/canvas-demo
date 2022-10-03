@@ -1,6 +1,7 @@
 package com.bitcolon.canvasdemo
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -17,69 +18,53 @@ class CustomView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var paint: Paint = Paint()
+    var paint: Paint = Paint()
 
     private val path: Path = Path()
 
     private var dX: Float = 0.0f
     private var dY: Float = 0.0f
 
-    // Shapes
-    private val shapeValues = arrayOf("line", "triangle", "square", "rectangle", "circle")
-    private var currentShapeIndex = 0
-
     // Tools
     private val toolValues = arrayOf("pen", "eraser")
     private val currentToolIndex = 0
 
     // Colors
-    private val colorValues = arrayOf("black", "red", "green", "blue", "yellow", "white")
-    private val currentColorIndex = 0
+    private val colorValues = arrayOf("red", "green", "blue", "yellow", "white", "black")
+    public var currentColorIndex = 0
+
+    var color: Int = Color.RED
 
     // Brushes
     private val brushValues = arrayOf("small", "medium", "large")
     private val currentBrushIndex = 0
 
-    private var trianglePath: Path? = null
+    // Brush styles
+    private val brushStyleValues = arrayOf("solid", "dashed", "dotted")
 
-    // constructor() for trianglePath CustomView
-    init {
-        trianglePath = Path()
-    }
+    // Get PreferenceManager Instance
+    val sharedPref: SharedPreferences = context.getSharedPreferences("com.bitcolon.canvasdemo", Context.MODE_PRIVATE)
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        invalidate()
         setupPaint()
-
-        Log.d("CustomView", "onDraw: $shapeValues")
-
+//        Log.d("COLOR", color.toString())
         canvas.drawPath(path, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val result = super.onTouchEvent(event)
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            currentShapeIndex =  (currentShapeIndex ++) % shapeValues.length;
-            postInvalidate();
-            return true;
-        }
-        return result;
-
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 dX = event.rawX
                 dY = event.rawY
-                if (mode == 0) {
-                    path.moveTo(dX, dY)
-                }
+                path.moveTo(dX, dY)
             }
             MotionEvent.ACTION_MOVE -> {
                 dX = event.rawX
                 dY = event.rawY
-                if (mode == 0) {
-                    path.lineTo(dX, dY)
-                }
+                path.lineTo(dX, dY)
             }
         }
         postInvalidate()
@@ -87,12 +72,20 @@ class CustomView @JvmOverloads constructor(
     }
 
     private fun setupPaint() {
-        paint.color = Color.BLUE
+        val c = sharedPref.getInt("color", Color.RED)
+        Log.d("Current Color: ", c.toString())
+        // Get color from shared preferences
+//        paint.color = sharedPref.getInt("color", Color.RED)
+        paint.color = c
         paint.isAntiAlias = true
         paint.strokeWidth = 5F
         paint.style = Paint.Style.FILL_AND_STROKE
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
         paint.style = Paint.Style.STROKE
+    }
+
+    public fun newColor(colorCode: Int) {
+        color = colorCode
     }
 }

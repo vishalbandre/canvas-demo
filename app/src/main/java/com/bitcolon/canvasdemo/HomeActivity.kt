@@ -1,20 +1,22 @@
 package com.bitcolon.canvasdemo
 
-import android.graphics.Canvas
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AppCompatActivity
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var customView: CustomView
 
-    private lateinit var btnPen: Button
-    private lateinit var btnCircle: Button
-    private lateinit var btnEraser: Button
+    private lateinit var btnColorRed: Button
+    private lateinit var btnColorGreen: Button
+    private lateinit var btnColorBlue: Button
+
+    // Get PreferenceManager
+//    val sharedPref : SharedPreferences = getSharedPreferences("com.bitcolon.canvasdemo", Context.MODE_PRIVATE)
 
 //    private lateinit var constraintLayout: ConstraintLayout
 
@@ -24,38 +26,35 @@ class HomeActivity : AppCompatActivity() {
 
         customView = CustomView(this)
 
-        btnPen = findViewById(R.id.btnPen)
-        btnCircle = findViewById(R.id.btnCircle)
-        btnEraser = findViewById(R.id.btnEraser)
+        btnColorRed = findViewById(R.id.btnColorRed)
+        btnColorGreen = findViewById(R.id.btnColorGreen)
+        btnColorBlue = findViewById(R.id.btnColorBlue)
 
-        btnPen.setOnClickListener {
-            customView.mode = 0
+        val sharedPref = getSharedPreferences("com.bitcolon.canvasdemo", Context.MODE_PRIVATE)
+
+        btnColorRed.setOnClickListener {
+            // Add color in shared preferences
+            with(sharedPref.edit()) {
+                putInt("color", Color.RED)
+                apply()
+            }
         }
 
-        btnCircle.setOnClickListener {
-            customView.mode = 1
+        btnColorGreen.setOnClickListener {
+            // Add color in shared preferences
+            with(sharedPref.edit()) {
+                putInt("color", Color.GREEN)
+                apply()
+            }
         }
 
-//        // Initiate the ImageView and its properties
-//        val i = ImageView(this).apply {
-//            setImageResource(R.drawable.img1)
-//            contentDescription = resources.getString(R.string.image_1_description)
-//
-//            // Set the ImageView bounds to match the Drawable's dimensions
-//            adjustViewBounds = true
-//            layoutParams = ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT
-//            )
-//        }
-//
-//        // Create a ConstranitLayout in which to add the ImageView
-//        constraintLayout = ConstraintLayout(this).apply {
-//            addView(i)
-//        }
-//
-//        // Set the layout as the content view
-//        setContentView(constraintLayout)
+        btnColorBlue.setOnClickListener {
+            // Add color in shared preferences
+//            with(sharedPref.edit()) {
+//                putInt("color", Color.BLUE)
+//                apply()
+//            }
+        }
     }
 
 
